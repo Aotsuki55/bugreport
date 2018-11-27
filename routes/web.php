@@ -2,6 +2,8 @@
 
 use App\Bug;
 use Illuminate\Http\Request;
+use App\Mail\ReportShipped;
+//use App\Mail;
 
 Route::get('/', function () {
   $bugs = Bug::orderBy('created_at', 'asc')->get();
@@ -11,13 +13,15 @@ Route::get('/', function () {
   ]);
 });
 
+//Route::get('email/create', 'EmailController@create');
+
 Route::post('/bug', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
         'address' => 'nullable|max:255',
         'title' => 'nullable|max:10000',
         'body' => 'nullable|max:255',
-        'file'=>'nullable|image'
+        'file'=>'nullable|image|max:102400'
     ]);
 
     if($validator->fails()){
@@ -50,8 +54,25 @@ Route::post('/bug', function (Request $request) {
       rename("../storage/".$path,"../storage/".$path3."/".$path2['basename']);
     }
     $bug->save();
-    return redirect('/');
 
+    $sendToList=array();
+    $sendData="";
+    $addresslist = fopen("../resources/views/emails/sendaddress/addresslist.php", "r");
+    while ($List = fgets($addresslist)) {
+      $List = str_replace(array("\r\n", "\r", "\n"), '', $List);
+      if($List=="") break;
+      if(filter_var($List, FILTER_VALIDATE_EMAIL)){
+        $sendToList[]=$List;
+      }
+    }
+    fclose($addresslist);
+
+    foreach ($sendToList as $sendTo) {
+      Mail::to($sendTo)->send(new ReportShipped($sendData));
+    }
+
+
+    return redirect('/');
 });
 
 Route::delete('/bug/{bug}', function (Bug $bug) {

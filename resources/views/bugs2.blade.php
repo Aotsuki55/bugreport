@@ -89,73 +89,64 @@
   		    <div class="panel-body">
   			<table class="table table-striped bug-table">
   			    <thead>
-          <th>ID</th>
   				<th>Name</th>
+          <th>Address</th>
           <th>Title</th>
-  				<!-- <th>&nbsp;</th> -->
+          <th>Body</th>
+          <th>Image</th>
+  				<th>&nbsp;</th>
   			    </thead>
   			    <tbody>
             <?php $i=0;?>
   				@foreach($bugs as $bug)
 
   				    <tr class="item-done clickable" data-toggle="collapse"  href="<?php echo "#collapse".$i?>">
-  					<td class="col-md-2"><div>{{ $bug->id }}</div></td>
-            <td class="col-md-4"><div>{{ $bug->name }}</div></td>
-            <td class="col-md-6"><div>{{ $bug->title }}</div></td>
+  					<td class="col-md-2"><div>{{ $bug->name }}</div></td>
+            <td class="col-md-3"><div>{{ $bug->address }}</div></td>
+            <td class="col-md-2"><div>{{ $bug->title }}</div></td>
+            <td class="col-md-2"><div>{{ $bug->body }}</div></td>
+            <td class="col-md-3">
+              <div>
+                <?php if ($bug->filename!="") :
+                  $pathpath=pathinfo($bug->filename);?>
+                  <img border="0" src="{{ asset( "img/".$pathpath['filename'].'/'.$bug->filename)}}" width="128" height="128" alt="<?php echo $bug->filename;?>">
+                <?php endif; ?>
+              </div>
+            </td>
+
+            <!-- <tr> -->
+              <!-- Bug Name -->
+              <!-- <td class="table-text">
+                <div>{{ $bug->name }}</div>
+              </td> -->
+
+              <!-- Delete Button -->
+              <td>
+                <form action="{{ url('bug/'.$bug->id) }}" method="POST">
+                  {{ csrf_field() }}
+                  {{ method_field('DELETE') }}
+
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"></i> Delete
+                  </button>
+                </form>
+              </td>
             </tr>
             <tr>
                 <!-- ここのstleは!importantを使ってcssファイルにした方が良い -->
-                <td colspan="12" style="padding:0px">
+                <td colspan="2" style="padding:0px">
+
                     <div id="<?php echo "collapse".$i?>" class="collapse">
-
-
-                      <div class="panel-body">
-              			<table class="table table-striped bug-table">
-              			    <thead>
-                      <th>Address</th>
-                      <th>Body</th>
-                      <th>Image</th>
-              				<th>&nbsp;</th>
-              			    </thead>
-              			    <tbody>
-
-              				    <tr class="item-done clickable" data-toggle="collapse"  href="<?php echo "#collapse".$i?>">
-                        <td class="col-md-3"><div>{{ $bug->address }}</div></td>
-                        <td class="col-md-4"><div>{{ $bug->body }}</div></td>
-                        <td class="col-md-4">
-                          <div>
-                            <?php if ($bug->filename!="") :
-                              $pathpath=pathinfo($bug->filename);?>
-                              <p class="resizeimage">
-                                <img border="0" src="{{ asset( "img/".$pathpath['filename'].'/'.$bug->filename)}}" alt="<?php echo $bug->filename;?>">
-                              </p>
-                            <?php endif; ?>
-                          </div>
-                        </td>
-
-                          <!-- Delete Button -->
-                          <td class="col-md-1">
-                            <form action="{{ url('bug/'.$bug->id) }}" method="POST">
-                              {{ csrf_field() }}
-                              {{ method_field('DELETE') }}
-
-                              <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"></i> Delete
-                              </button>
-                            </form>
-                          </td>
-                        </tr>
-
-              			    </tbody>
-              			</table>
-              		</div>
-
-
+                        <ol type="a" style="background-color:white;">
+                            <li><a>メニュー１</a></li>
+                            <li><a>メニュー２</a></li>
+                            <li><a>メニュー３</a></li>
+                        </ol>
                     </div>
                 </td>
             </tr>
 
-  					<!-- <td>&nbsp;</td> -->
+  					<td>&nbsp;</td>
             <?php $i++;?>
   				    <!-- </tr> -->
   				@endforeach
@@ -213,7 +204,6 @@
     <tr>
         <!- ここのstleは!importantを使ってcssファイルにした方が良い ->
         <td colspan="2" style="padding:0px">
-
             <div id="accordion5" class="collapse">
                 <ol type="a" style="background-color:white;">
                     <li><a>メニュー１</a></li>
@@ -224,4 +214,4 @@
         </td>
     </tr>
   </tbody>
-</table> -->
+  </table> -->

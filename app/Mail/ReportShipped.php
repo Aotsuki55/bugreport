@@ -21,6 +21,6 @@ class ReportShipped extends Mailable
     public function build()
     {
         return $this->subject('BugReport')
-            ->text('emails.templates.registers_mail');
+            ->text('emails.templates.bug_mail');
     }
 }
